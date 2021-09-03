@@ -108,7 +108,7 @@ class AdminController extends Controller
 
                    //upload image
                    if($request->hasFile('admin_image')){
-                       return $image_tmp = $request ->file('admin_image');
+                        $image_tmp = $request ->file('admin_image');
                        if($image_tmp->isValid()){
                            //Get image Extensions
                            $extension = $image_tmp->getClientOriginalExtension();
