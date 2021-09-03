@@ -82,7 +82,7 @@
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">Image</label>
-                      <input type="file" class="form-control" id="admin_image" name="admin_image" >
+                      <input type="file" class="form-control" id="admin_image" name="admin_image" accept="image/*">
                       @if (!empty(Auth::guard('admin')->user()->image)))
                         <a href="">View Image</a>
                         <input type="hidden" name="current_admin_image" value="{{ Auth::guard('admin')->user()->image }}">
