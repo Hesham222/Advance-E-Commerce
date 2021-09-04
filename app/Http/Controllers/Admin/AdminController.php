@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
+use Hash;
+use Image;
 use Session;
 use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Hash;
-use Image;
 
 
 class AdminController extends Controller
@@ -105,7 +106,7 @@ class AdminController extends Controller
                     //'admin_image.image' => 'Valid Image is Required',
                    ];
                    $this->validate($request,$rules,$messages);
-
+                   DB::beginTransaction();
                    //upload image
                    if($request->hasFile('admin_image')){
                         $image_tmp = $request ->file('admin_image');
@@ -114,15 +115,15 @@ class AdminController extends Controller
                            $extension = $image_tmp->getClientOriginalExtension();
                            // generate new image name
                            $imageName = rand(111,99999).'.'.$extension;
-                           $imagePath = 'images/admin_images/admin_photos'.$imageName;
+                           $imagePath = 'images/admin_images/admin_photos/'.$imageName;
                            // upload image
                            Image::make($image_tmp)->save($imagePath);
                        }else if(!empty($data['current_admin_image'])){
-                            $imageName = $data['current_admin_image'];
+                            $imagePath = $data['current_admin_image'];
                        }else {
-                            $imageName = "";
+                           $imagePath = "";
                        }
-                       Admin::where('id',Auth::guard('admin')->user()->id)->update(['image' => $imageName
+                       Admin::where('id',Auth::guard('admin')->user()->id)->update(['image' => $imagePath
                     ]);
                    }
 
@@ -131,13 +132,100 @@ class AdminController extends Controller
                        'mobile' => $data['admin_mobile'],
 
                    ]);
+                   DB::commit();
                    Session::flash('success_message','Admin Details has been Updated Successfully ');
                    return redirect()->back();
             }
         } catch (\Throwable $th) {
             return $th;
+            DB::rollback();
+
         }
 
         return view('admin.updata_admin_details',compact('admindetails'));
     }
+
+    // public function updateAdminDetails(Request $request){
+    //     $admindetails = Admin::where('email',Auth::guard('admin')->user()->email)->first();
+    //     try {
+    //         if($request ->isMethod('post')){
+    //             $data = $request->all();
+    //             //echo "<pre>" ; print_r ($data) ;
+
+    //             $rules =[
+    //                 'admin_name' => 'required|alpha',
+    //                 'admin_mobile' => 'required|numeric',
+    //                 //'admin_image' => 'image',
+    //                ];
+    //                $messages =[
+    //                 'admin_name.required' => ' Name is Required',
+    //                 'admin_name.alpha' => 'Valid Name is Required',
+    //                 'admin_mobile.required' => ' Mobile is Required',
+    //                 'admin_mobile.numeric' => 'Valid Mobile is Required',
+    //                 //'admin_image.image' => 'Valid Image is Required',
+    //                ];
+    //                $this->validate($request,$rules,$messages);
+    //                //upload image Shabaan way
+    //                if($request->hasFile('admin_image')){
+    //                 $image_tmp = $request ->file('admin_image');
+    //                if($image_tmp->isValid()){
+    //                    //Get image Extensions
+    //                    $extension = $image_tmp->getClientOriginalExtension();
+    //                    // generate new image name
+    //                    $imageName = rand(111,99999).'.'.$extension;
+    //                    $imagePath = 'images/admin_images/admin_photos/'.$imageName;
+    //                    // upload image
+    //                    Image::make($image_tmp)->save($imagePath);
+    //                }else if(!empty($data['current_admin_image'])){
+    //                     $imagePath = $data['current_admin_image'];
+    //                }else {
+    //                    $imagePath = "";
+    //                }
+    //                Admin::where('id',Auth::guard('admin')->user()->id)->update(['image' => $imagePath
+    //             ]);
+    //            }
+
+    //                //upload image Etsh way
+    //             //    if($request->hasFile('admin_image')){
+    //             //         $image_tmp = $request ->file('admin_image');
+    //             //        if($image_tmp->isValid()){
+    //             //            //Get image Extensions
+    //             //            $extension = $image_tmp->getClientOriginalExtension();
+    //             //            // generate new image name
+    //             //            $imageName = rand(111,99999).'.'.$extension;
+    //             //            $imagePath = 'images/admin_images/admin_photos'.$imageName;
+    //             //            // upload image
+    //             //            Image::make($image_tmp)->save($imagePath);
+    //             //        }else if(!empty($data['current_admin_image'])){
+    //             //             $imageName = $data['current_admin_image'];
+    //             //        }else {
+    //             //             $imageName = "";
+    //             //        }
+    //             //        Admin::where('id',Auth::guard('admin')->user()->id->update(['image' => $imageName
+    //             //     ]));
+    //             //    }
+
+    //             //Emam Way
+    //             // if ($request->has('admin_image')) {
+    //             //     $filePath = uploadImage('admin', $request->admin_image);
+    //             //     Admin::where('id', Auth::guard('admin')->user()->id)
+    //             //         ->update([
+    //             //             'admin_image' => $filePath,
+    //             //         ]);
+    //             // }
+
+    //                Admin::where('id',Auth::guard('admin')->user()->id)->update([
+    //                    'name' => $data['admin_name'],
+    //                    'mobile' => $data['admin_mobile'],
+
+    //                ]);
+    //                Session::flash('success_message','Admin Details has been Updated Successfully ');
+    //                return redirect()->back();
+    //         }
+    //     } catch (\Throwable $th) {
+    //         return $th;
+    //     }
+
+    //     return view('admin.updata_admin_details',compact('admindetails'));
+    // }
 }

@@ -53,53 +53,63 @@
                 <form role="form" method="post" action="{{ url('/admin/update-admin-details') }}" name="updateAdminDetails" id="updateAdminDetails" enctype="multipart/form-data">
                     @csrf
                   <div class="card-body">
-                    {{-- <div class="form-group">
-                        <label for="exampleInputEmail1">Admin Name </label>
-                        <input type="text" value="{{ $admindetails->name }}" class="form-control"placeholder="Enter Admin Name/Sub Admin Name" id="admin_name" nmae="admin_name">
-                      </div> --}}
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Admin Email </label>
-                      <input value="{{ $admindetails->email }}" class="form-control" readonly="">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Admin Type </label>
-                      <input value="{{ $admindetails->type }}" class="form-control" readonly="">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Admin Name</label>
-                      <input  class="form-control" id="admin_name" name="admin_name"  type="text" placeholder="Enter Admin Name ">
-                      @error('admin_name')
-                      <span class="text-danger"> {{$message}}</span>
-                      @enderror
-                    </div>
-                    <span id="checkCuurentPassword"></span>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Mobile </label>
-                      <input type="text" id="admin_mobile" name="admin_mobile" class="form-control"  placeholder="Enter Admin Mobile">
-                      @error('admin_mobile')
-                      <span class="text-danger"> {{$message}}</span>
-                      @enderror
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Image</label>
-                      <input type="file" class="form-control" id="admin_image" name="admin_image" accept="image/*">
-                      @if (!empty(Auth::guard('admin')->user()->image)))
-                        <a href="">View Image</a>
-                        <input type="hidden" name="current_admin_image" value="{{ Auth::guard('admin')->user()->image }}">
-                      @endif
-                      @error('admin_image')
-                      <span class="text-danger"> {{$message}}</span>
-                      @enderror
-                    </div>
+                        {{-- <div class="form-group">
+                            <label for="exampleInputEmail1">Admin Name </label>
+                            <input type="text" value="{{ $admindetails->name }}" class="form-control"placeholder="Enter Admin Name/Sub Admin Name" id="admin_name" nmae="admin_name">
+                        </div> --}}
+                        <div class="form-group">
+                        <label for="exampleInputEmail1">Admin Email </label>
+                        <input value="{{ $admindetails->email }}" class="form-control" readonly="">
+                        </div>
+                        <div class="form-group">
+                        <label for="exampleInputEmail1">Admin Type </label>
+                        <input value="{{ $admindetails->type }}" class="form-control" readonly="">
+                        </div>
+                        <div class="form-group">
+                        <label for="exampleInputPassword1">Admin Name</label>
+                        <input  class="form-control" id="admin_name" name="admin_name"  type="text" placeholder="Enter Admin Name ">
+                        @error('admin_name')
+                        <span class="text-danger"> {{$message}}</span>
+                        @enderror
+                        </div>
+                        <span id="checkCuurentPassword"></span>
+                        <div class="form-group">
+                        <label for="exampleInputPassword1">Mobile </label>
+                        <input type="text" id="admin_mobile" name="admin_mobile" class="form-control"  placeholder="Enter Admin Mobile">
+                        @error('admin_mobile')
+                        <span class="text-danger"> {{$message}}</span>
+                        @enderror
+                        </div>
+                        {{-- <div class="form-group">
+                        <label for="exampleInputPassword1">Image</label>
+                        @if (!empty(Auth::guard('admin')->user()->image)))
+                            <a href="">View Image</a>
+                            <input type="hidden" name="current_admin_image" value="{{ Auth::guard('admin')->user()->image }}">
+                        @endif
+                        <input type="file" class="form-control" id="admin_image" name="admin_image" >
 
-                  </div>
-                  <!-- /.card-body -->
+                        @error('admin_image')
+                        <span class="text-danger"> {{$message}}</span>
+                        @enderror
+                        </div> --}}
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Admin Image</label>
+                            @if(!empty(Auth::guard('admin')->user()->image))
+                                <a target="_blank" href="{{url(Auth::guard('admin')->user()->image)}}">View Image</a>
+                                <input type="hidden" name="currentAdminImage" value="{{Auth::guard('admin')->user()->image}}">
+                            @endif
+                            <input name="adminImage" type="file" class="form-control"
+                                id="adminImage" placeholder="{{Auth::guard('admin')->user()->image}}">
+                        </div>
 
-                  <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </form>
-              </div>
+            </div>
               <!-- /.card -->
 
 
