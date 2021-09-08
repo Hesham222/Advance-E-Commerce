@@ -14,7 +14,8 @@ use App\Http\Controllers\Controller;
 
 class AdminController extends Controller
 {
-    public function Dashboard(){
+    public function dashboard(){
+        Session::put('page','dashboard');
         return view('admin.admin_dashboard');
     }
 
@@ -52,6 +53,8 @@ class AdminController extends Controller
     }
 
     public function settings(){
+        Session::put('page','settings');
+
          $admindetails = Admin::where('email',Auth::guard('admin')->user()->email)->first();
 
         return view('admin.admin_settings',compact('admindetails'));
@@ -87,65 +90,93 @@ class AdminController extends Controller
         }
     }
     public function updateAdminDetails(Request $request){
+        Session::put('page','update-admin-details');
+
         $admindetails = Admin::where('email',Auth::guard('admin')->user()->email)->first();
         try {
+
             if($request ->isMethod('post')){
                 $data = $request->all();
                 //echo "<pre>" ; print_r ($data) ;
 
                 $rules =[
-                    'admin_name' => 'required|alpha',
-                    'admin_mobile' => 'required|numeric',
-                    //'admin_image' => 'image',
+                    // 'admin_name' => 'required',
+                    // 'admin_mobile' => 'required|numeric',
+                    // //'admin_image' => 'required|mimes:jpg,jpeg,png',
                    ];
+
                    $messages =[
-                    'admin_name.required' => ' Name is Required',
-                    'admin_name.alpha' => 'Valid Name is Required',
-                    'admin_mobile.required' => ' Mobile is Required',
-                    'admin_mobile.numeric' => 'Valid Mobile is Required',
-                    //'admin_image.image' => 'Valid Image is Required',
+                    // 'admin_name.required' => ' Name is Required',
+                    // 'admin_name.alpha' => 'Valid Name is Required',
+                    // 'admin_mobile.required' => ' Mobile is Required',
+                    // 'admin_mobile.numeric' => 'Valid Mobile is Required',
+                    // //'admin_image.required' => 'Valid Image is Required',
                    ];
-                   $this->validate($request,$rules,$messages);
-                   DB::beginTransaction();
-                   //upload image
+
+                  // $this->validate($request,$rules,$messages);
+
+
                    if($request->hasFile('admin_image')){
-                        $image_tmp = $request ->file('admin_image');
-                       if($image_tmp->isValid()){
-                           //Get image Extensions
-                           $extension = $image_tmp->getClientOriginalExtension();
-                           // generate new image name
-                           $imageName = rand(111,99999).'.'.$extension;
-                           $imagePath = 'images/admin_images/admin_photos/'.$imageName;
-                           // upload image
-                           Image::make($image_tmp)->save($imagePath);
+                       if($request -> admin_image -> isValid()){
+                            $fileExtension =$request -> admin_image -> getClientOriginalExtension();
+                            $fileName = time().'.'.$fileExtension;
+                            $path = 'images/admin_images/admin_photos';
+                            $request -> admin_image ->move($path,$fileName);
                        }else if(!empty($data['current_admin_image'])){
-                            $imagePath = $data['current_admin_image'];
-                       }else {
-                           $imagePath = "";
-                       }
-                       Admin::where('id',Auth::guard('admin')->user()->id)->update(['image' => $imagePath
+                                    $imagePath = $data['current_admin_image'];
+                        }else {
+                                   $imagePath = "";
+                        }
+                        Admin::where('id',Auth::guard('admin')->user()->id)->update([
+                             'image' => $fileName
+
                     ]);
-                   }
+
+                }
 
                    Admin::where('id',Auth::guard('admin')->user()->id)->update([
                        'name' => $data['admin_name'],
                        'mobile' => $data['admin_mobile'],
+                    ]);
 
-                   ]);
-                   DB::commit();
+
                    Session::flash('success_message','Admin Details has been Updated Successfully ');
                    return redirect()->back();
             }
         } catch (\Throwable $th) {
             return $th;
-            DB::rollback();
+           // DB::rollback();
 
         }
 
         return view('admin.updata_admin_details',compact('admindetails'));
     }
 
-    // public function updateAdminDetails(Request $request){
+
+}
+
+                   //upload image
+                //    if($request->hasFile('admin_image')){
+                //         $image_tmp = $request ->file('admin_image');
+                //        if($image_tmp->isValid()){
+                //            //Get image Extensions
+                //            $extension = $image_tmp->getClientOriginalExtension();
+                //            // generate new image name
+                //            $imageName = rand(111,99999).'.'.$extension;
+                //            $imagePath = 'images/admin_images/admin_photos/'.$imageName;
+                //            // upload image
+                //            Image::make($image_tmp)->save($imagePath);
+                //        }else if(!empty($data['current_admin_image'])){
+                //             $imagePath = $data['current_admin_image'];
+                //        }else {
+                //            $imagePath = "";
+                //        }
+                //        Admin::where('id',Auth::guard('admin')->user()->id)->update(['image' => $imagePath
+                //     ]);
+                //    }
+                //
+
+// public function updateAdminDetails(Request $request){
     //     $admindetails = Admin::where('email',Auth::guard('admin')->user()->email)->first();
     //     try {
     //         if($request ->isMethod('post')){
@@ -228,4 +259,3 @@ class AdminController extends Controller
 
     //     return view('admin.updata_admin_details',compact('admindetails'));
     // }
-}

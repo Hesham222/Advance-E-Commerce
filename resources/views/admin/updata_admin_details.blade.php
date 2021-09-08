@@ -81,9 +81,16 @@
                         @enderror
                         </div>
                         {{-- <div class="form-group">
+                            <div class="text-center">
+                                <img
+                                    src="{{url('images/admin_images/admin_photos/'.Auth::guard('admin')->user()->image) }}"
+                                    class="" width="100px" height="100px" alt=" Admin image  ">
+                            </div>
+                        </div> --}}
+                        <div class="form-group">
                         <label for="exampleInputPassword1">Image</label>
-                        @if (!empty(Auth::guard('admin')->user()->image)))
-                            <a href="">View Image</a>
+                        @if (!empty($admindetails->image)))
+                        <a target="_blank" href="{{url('images/admin_images/admin_photos/'.Auth::guard('admin')->user()->image)}}">View Image</a>
                             <input type="hidden" name="current_admin_image" value="{{ Auth::guard('admin')->user()->image }}">
                         @endif
                         <input type="file" class="form-control" id="admin_image" name="admin_image" >
@@ -91,8 +98,8 @@
                         @error('admin_image')
                         <span class="text-danger"> {{$message}}</span>
                         @enderror
-                        </div> --}}
-                        <div class="form-group">
+                        </div>
+                        {{-- <div class="form-group">
                             <label for="exampleInputPassword1">Admin Image</label>
                             @if(!empty(Auth::guard('admin')->user()->image))
                                 <a target="_blank" href="{{url(Auth::guard('admin')->user()->image)}}">View Image</a>
@@ -100,7 +107,7 @@
                             @endif
                             <input name="adminImage" type="file" class="form-control"
                                 id="adminImage" placeholder="{{Auth::guard('admin')->user()->image}}">
-                        </div>
+                        </div> --}}
 
                     </div>
                     <!-- /.card-body -->
