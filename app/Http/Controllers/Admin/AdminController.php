@@ -100,20 +100,19 @@ class AdminController extends Controller
                 //echo "<pre>" ; print_r ($data) ;
 
                 $rules =[
-                    // 'admin_name' => 'required',
-                    // 'admin_mobile' => 'required|numeric',
-                    // //'admin_image' => 'required|mimes:jpg,jpeg,png',
+                    'admin_name' => 'required|string',
+                    'admin_mobile' => 'required',
+                    'admin_image' => 'required|mimes:jpg,jpeg,png',
                    ];
 
                    $messages =[
-                    // 'admin_name.required' => ' Name is Required',
-                    // 'admin_name.alpha' => 'Valid Name is Required',
-                    // 'admin_mobile.required' => ' Mobile is Required',
-                    // 'admin_mobile.numeric' => 'Valid Mobile is Required',
-                    // //'admin_image.required' => 'Valid Image is Required',
+                    'admin_name.required' => ' Name is Required',
+                    'admin_name.string' => 'Valid Name is Required',
+                    'admin_mobile.required' => ' Mobile is Required',
+                    'admin_image.required' => 'Valid Image is Required',
                    ];
 
-                  // $this->validate($request,$rules,$messages);
+                  $this->validate($request,$rules,$messages);
 
 
                    if($request->hasFile('admin_image')){

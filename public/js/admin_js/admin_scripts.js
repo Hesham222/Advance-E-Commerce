@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+//check current password
     $("#current_password").keyup(function(){
         var current_password = $("#current_password").val();
         //alert(current_password);
@@ -22,6 +22,7 @@ $(document).ready(function(){
         });
     });
 
+    //update sections status
     $(".updateSectionStatus").click(function(){
         var status = $(this).text();
         var section_id = $(this).attr("section_id");
@@ -42,8 +43,11 @@ $(document).ready(function(){
                 alert("Error");
             }
         });
+    });
 
-    });    $(".updateCategoryStatus").click(function(){
+    //update Categories status
+
+    $(".updateCategoryStatus").click(function(){
         var status = $(this).text();
         var category_id = $(this).attr("category_id");
         // alert(status);
@@ -64,5 +68,21 @@ $(document).ready(function(){
             }
         });
 
+    });
+
+    //append Categories Level
+    $('#section_id').change(function(){
+        var section_id = $(this).val();
+        //alert(section_id);
+        $.ajax({
+            type:'post',
+            url:'/admin/append-categoreies-level',
+            data:{section_id:section_id},
+            success:function(resp){
+                $("#appendCategoriesLevel").html(resp);
+            },error:function(){
+                alert('Error');
+            }
+        });
     });
 });
