@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Categories</li>
+              <li class="breadcrumb-item active">Products</li>
             </ol>
           </div>
         </div>
@@ -42,50 +42,47 @@
         @endif
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Categories</h3>
-              <a href="{{ url('admin/add-edit-category') }}" style="max-width: 150px; float: right; display:inline-block" class="btn btn-block btn-success">Add Category</a>
+              <h3 class="card-title">Products</h3>
+              <a href="{{ url('admin/add-edit-product') }}" style="max-width: 150px; float: right; display:inline-block" class="btn btn-block btn-success">Add Product</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="categories" class="table table-bordered table-striped">
+              <table id="products" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Category </th>
-                  <th>Parent Category </th>
+                  <th>Product Name </th>
+                  <th>Product code </th>
+                  <th>Product color</th>
+                  <th>Category</th>
                   <th>Section</th>
-                  <th>URL</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($categories as $category)
-                    @if (!isset($category ->parentcategory->category_name))
-                        <?php $parent_category = "Root"; ?>
-                        @else
-                        <?php $parent_category = $category ->parentcategory->category_name; ?>
-                    @endif
+                @foreach ($products as $product)
                     <tr>
-                        <td>{{ $category ->id }}</td>
-                        <td>{{ $category ->category_name }} </td>
-                        <td>{{ $parent_category}} </td>
-                        <td>{{ $category ->section->name }}</td>
-                        <td>{{ $category ->url }} </td>
+                        <td>{{ $product ->id }}</td>
+                        <td>{{ $product ->product_name }} </td>
+                        <td>{{ $product ->product_code }} </td>
+                        <td>{{ $product ->product_color }}</td>
+                        <td>{{ $product ->category->category_name }}</td>
+                        <td>{{ $product ->section->name }}</td>
                         <td>
-                            @if($category ->status ==1)
-                               <a class="updateCategoryStatus" id="category-{{ $category ->id }}" category_id="{{ $category ->id }}"
+                            @if($product ->status ==1)
+                               <a class="updateProductStatus" id="product-{{ $product ->id }}" product_id="{{ $product ->id }}"
                                 href="javascript:void(0)">Active</a>
                             @else
-                                <a class="updateCategoryStatus" id="category-{{ $category ->id }}" category_id="{{ $category ->id }}"
+                                <a class="updateProductStatus" id="product-{{ $product ->id }}" product_id="{{ $product ->id }}"
                                 href="javascript:void(0)">Inactive</a>
                             @endif
                         </td>
                         <td>
-                            <a href="{{ url('admin/add-edit-category',$category ->id) }}">Edit</a>
+                            <a href="{{ url('admin/add-edit-product',$product ->id) }}">Edit</a>
                             &nbsp;&nbsp;
-                            <a href="javascript:void(0)"  class="confirmDelete" record="category" recordid="{{ $category ->id }}"
-                                {{-- href="{{ url('admin/delete-category',$category ->id) }}" --}}
+                            <a href="javascript:void(0)"  class="confirmDelete" record="product" recordid="{{ $product ->id }}"
+                                {{-- href="{{ url('admin/delete-product',$product ->id) }}" --}}
                                 >Delete</a>
 
                         </td>

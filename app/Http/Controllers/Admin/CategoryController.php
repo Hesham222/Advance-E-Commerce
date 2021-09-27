@@ -65,17 +65,19 @@ class CategoryController extends Controller
            $category = new Category;
            $categorydata = array();
            $getCategories = array();
+           $message = "Category added has Successfully";
         }else {
             $title = "Edit Category";
             //Edit Category functionality
             $categorydata = Category::find($id);
             $getCategories = Category::with('subcategories')->where(['section_id'=>$categorydata['section_id'],'parent_id'=>0,'status'=>1])->get();
-
+            $message = " Category Updated Successfully";
+            $category = Category::find($id);
         }
         try {
             if($request ->isMethod('post')){
                 $data = $request ->all();
-                //echo "<pre>" ; print_r ($data) ; die;
+                // echo "<pre>" ; print_r ($data) ; die;
                 $rules = [
                     'category_name' => 'required|string',
                     'section_id' => 'required',
@@ -91,7 +93,7 @@ class CategoryController extends Controller
                     'admin_image.required' => 'Valid Image is Required',
                    ];
 
-                  $this->validate($request,$rules,$messages);
+               //  $this->validate($request,$rules,$messages);
 
 
                 if($request->hasFile('category_image')){
@@ -100,6 +102,19 @@ class CategoryController extends Controller
                          $path = 'images/category_images';
                          $request -> category_image ->move($path,$fileName);
                         $category->category_image = $fileName;
+                }
+
+                if(empty($data['description'])){
+                    $data['description'] ="";
+                }
+                if(empty($data['meta_title'])){
+                    $data['meta_title'] ="";
+                }
+                if(empty($data['meta_description'])){
+                    $data['meta_description'] ="";
+                }
+                if(empty($data['meta_keywords'])){
+                    $data['meta_keywords'] ="";
                 }
 
                 $category->parent_id = $data['parent_id'];
@@ -114,13 +129,13 @@ class CategoryController extends Controller
                 $category->status = 1;
                 $category->save();
 
-                Session::flash('success_message','Admin Details has been Updated Successfully ');
+                Session::flash('success_message',$message);
                 return redirect('admin/categories');
 
             }
         } catch (\Throwable $th) {
             return $th;
-            Session::flash('error_message','Your Current password is incorrect ');
+            Session::flash('error_message','Category has not been added ');
             return redirect()->back();
         }
 
@@ -146,5 +161,43 @@ class CategoryController extends Controller
             return $th;
         }
 
+    }
+
+    public function deleteCategoryIamge($id){
+        try {
+                    //get category image
+        $categoryImage = Category::select('category_image')->find($id);
+        //get category path
+        $image_path = 'images/category_images/';
+
+        //delete category image from category images foldder if exists
+
+        if(file_exists($image_path.$categoryImage->category_image)){
+            unlink($image_path.$categoryImage->category_image);
+        }
+
+        //delete category image from categories table
+        Category::where('id',$id)->update(['category_image'=>'']);
+
+        $errormessage = "Category Image hasn't been deleted";
+        $message = "Category Image has been deleted";
+        Session::flash('success_message',$message);
+        return redirect()->back();
+
+
+        } catch (\Throwable $th) {
+            //return $th;
+            Session::flash('error_message',$errormessage );
+            return redirect()->back();
+        }
+
+    }
+
+    public function deleteCategory($id){
+        Category::with('subcategories')->where('id',$id)->delete();
+
+        $message = "Category has been deleted";
+        Session::flash('success_message',$message);
+        return redirect()->back();
     }
 }

@@ -70,6 +70,7 @@
     $(function () {
       $("#sections").DataTable();
       $("#categories").DataTable();
+      $("#products").DataTable();
 
 
 
@@ -100,5 +101,7 @@
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('js/admin_js/demo.js') }}"></script>
 <script src="{{ url('js/admin_js/admin_scripts.js') }}"></script>
+{{-- Sweet alert --}}
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

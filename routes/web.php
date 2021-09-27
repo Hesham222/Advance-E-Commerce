@@ -48,10 +48,18 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
         Route::post('update-category-status','CategoryController@updateCategoryStatus')->name('admin.update-category');
 
         Route::match(['get','post'],'add-edit-category/{id?}','CategoryController@addEditCategory');
-        route::post('append-categoreies-level','CategoryController@appendCategorieslevel');
+        Route::post('append-categoreies-level','CategoryController@appendCategorieslevel');
+        Route::get('delete-category-image/{id}','CategoryController@deleteCategoryIamge');
+        Route::get('delete-category/{id}','CategoryController@deleteCategory');
 
+########################## End category Routes #########################################################################
 
+########################## Begin Products Routes #########################################################################
 
+        Route::get('products','ProductController@products')->name('products');
+        Route::post('update-product-status','ProductController@updateProductStatus')->name('admin.update-category');
+        Route::get('delete-product/{id}','ProductController@deleteProduct');
+        Route::match(['get','post'],'add-edit-product/{id?}','ProductController@addEditProduct');
 
 
 
