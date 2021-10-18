@@ -82,7 +82,7 @@ class CategoryController extends Controller
                     'category_name' => 'required|string',
                     'section_id' => 'required',
                     'url' => 'required',
-                    'category_image' => 'required|mimes:jpg,jpeg,png',
+                    //'category_image' => 'required|mimes:jpg,jpeg,png',
                    ];
 
                    $messages =[
@@ -93,7 +93,7 @@ class CategoryController extends Controller
                     'admin_image.required' => 'Valid Image is Required',
                    ];
 
-               //  $this->validate($request,$rules,$messages);
+                 $this->validate($request,$rules,$messages);
 
 
                 if($request->hasFile('category_image')){
@@ -116,7 +116,6 @@ class CategoryController extends Controller
                 if(empty($data['meta_keywords'])){
                     $data['meta_keywords'] ="";
                 }
-
                 $category->parent_id = $data['parent_id'];
                 $category->section_id = $data['section_id'];
                 $category->category_name = $data['category_name'];
@@ -134,7 +133,7 @@ class CategoryController extends Controller
 
             }
         } catch (\Throwable $th) {
-            return $th;
+            throw $th;
             Session::flash('error_message','Category has not been added ');
             return redirect()->back();
         }
@@ -194,10 +193,21 @@ class CategoryController extends Controller
     }
 
     public function deleteCategory($id){
-        Category::with('subcategories')->where('id',$id)->delete();
+        try {
+            $deleteCategory = Category::find($id);
+            $deleteCategory->subcategories()->delete();
+            $deleteCategory->delete();
+            $message = "Category has been deleted";
 
-        $message = "Category has been deleted";
-        Session::flash('success_message',$message);
-        return redirect()->back();
+            Session::flash('success_message',$message);
+            return redirect()->back();
+
+
+        } catch (\Throwable $th) {
+            return $th;
+            Session::flash('error_message',"Category hasn't been deleted");
+                 return redirect()->back();
+        }
+
     }
 }

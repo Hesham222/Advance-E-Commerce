@@ -67,8 +67,8 @@
                       <input class="form-control" id="category_name" name="category_name" type="text" placeholder="Enter category Name "
                       @if (!empty($categorydata['category_name']))
                         value="{{ $categorydata['category_name'] }}"
-                        @else
-                         value="{{ old('category_name') }}"
+                      @else
+                        value="{{ old('category_name') }}"
                       @endif
                       >
                       @error('category_name')
