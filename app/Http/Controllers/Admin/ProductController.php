@@ -281,7 +281,11 @@ class ProductController extends Controller
         }
 }
 
-
+    public function addAttributes($id){
+        $productdata = Product::find($id);
+        $title = "Products Attributes";
+        return view('admin.products.add_attributes',compact('productdata','title'));
+    }
 
 
 }
