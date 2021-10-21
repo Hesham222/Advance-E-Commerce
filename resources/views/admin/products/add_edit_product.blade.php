@@ -70,10 +70,17 @@
                             <optgroup label="{{ $section->name }}"></optgroup>
                             @foreach ($section->categories as $category)
                             <option value="{{ $category->id }}"
-                                {{-- ديه عشان انت لو اختارت الكاتورجري ودوست سابميت الفالديشن يشتغل ع كل ويفضل سايبلك اختيارك ميروحش --}}
-                                @if (!empty(@old('category_id')) && $category->id == @old('category_id'))
-                                selected =""
-                                @endif
+                                    {{-- Edit --}}
+                                    @if (isset($productdata['category_id']) && $productdata['category_id']== $category->id)
+                                    selected =""
+                                    @endif
+                                    {{-- for validation --}}
+                                    {{-- ديه عشان انت لو اختارت الكاتورجري ودوست سابميت الفالديشن يشتغل ع كل ويفضل سايبلك اختيارك ميروحش --}}
+                                    @if (!empty(@old('category_id')) && $category->id == @old('category_id'))
+                                    selected =""
+                                    @endif
+
+
                                 >&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;
                                 {{ $category->category_name }}</option>
                                 @foreach ($category->subcategories as $subcategory)
@@ -81,6 +88,13 @@
                                     @if (!empty(@old('category_id')) && $subcategory->id == @old('category_id'))
                                     selected =""
                                     @endif
+
+                                    @if (isset($productdata['category_id']) && $productdata['category_id']== $subcategory->id)
+                                    selected =""
+                                    @endif
+                                    {{-- @if (isset($productdata['category_id']) && $productdata['category_id']== $subcategory->id)
+                                    selected =""
+                                @endif --}}
                                     >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--&nbsp;&nbsp;
                                     {{ $subcategory->category_name }}</option>
                                 @endforeach
@@ -187,6 +201,17 @@
                           <span class="input-group-text" id="">Upload</span>
                         </div>
                       </div>
+
+                      @if (!empty($productdata['main_image']))
+                      <div style="height: 100px; margin-top:5px">
+                          <img src="{{ asset('images/products_images/'.$productdata['main_image']) }}" width="100px" height="100px" alt="">
+                          &nbsp;
+                          <a record="product-image" recordid="{{ $productdata['id']}}"  href="javascript:void(0)"  class="confirmDelete"
+                          {{-- href="{{ url('admin/delete-category-image',$categorydata['id']) }}" --}}
+
+                          > Delete Image</a>
+                      </div>
+                  @endif
                     </div>
                 </div>
               </div>
@@ -203,6 +228,16 @@
                         <span class="input-group-text" id="">Upload</span>
                       </div>
                     </div>
+                    @if (!empty($productdata['product_video']))
+                    <div>
+                        <a href="{{ url('videos/product_videos/'.$productdata['product_video']) }}" download>Download</a>
+                        &nbsp;|&nbsp;
+                        <a record="product-video" recordid="{{ $productdata['id']}}"  href="javascript:void(0)"  class="confirmDelete"
+                        {{-- href="{{ url('admin/delete-category-image',$categorydata['id']) }}" --}}
+
+                        > Delete Video</a>
+                    </div>
+                    @endif
                   </div>
                   <div class="form-group">
                     <label>product Description </label>
@@ -233,7 +268,11 @@
                     <select name="fabric" id="fabric" class="form-control select2" style="width: 100%;">
                       <option value="">Select</option>
                       @foreach ($fabricArray as $fabric)
-                            <option value="{{ $fabric }}">{{ $fabric }}</option>
+                            <option value="{{ $fabric }}"
+                            @if (isset($productdata['fabric']) && $productdata['fabric']== $fabric)
+                            selected =""
+                            @endif
+                            >{{ $fabric }}</option>
                       @endforeach
                     </select>
                     @error('fabric')
@@ -247,7 +286,11 @@
                     <select name="sleeve" id="sleeve" class="form-control select2" style="width: 100%;">
                       <option value="">Select</option>
                       @foreach ($sleeveArray as $sleeve)
-                            <option value="{{ $sleeve }}">{{ $sleeve }}</option>
+                            <option value="{{ $sleeve }}"
+                            @if (isset($productdata['sleeve']) && $productdata['sleeve']== $sleeve)
+                            selected =""
+                            @endif
+                            >{{ $sleeve }}</option>
                       @endforeach
                     </select>
                     @error('sleeve')
@@ -259,7 +302,11 @@
                     <select name="pattern" id="pattern" class="form-control select2" style="width: 100%;">
                       <option value="">Select</option>
                       @foreach ($patternArray as $pattern)
-                            <option value="{{ $pattern }}">{{ $pattern }}</option>
+                            <option value="{{ $pattern }}"
+                            @if (isset($productdata['pattern']) && $productdata['pattern']== $pattern)
+                            selected =""
+                            @endif
+                            >{{ $pattern }}</option>
                       @endforeach
                     </select>
                     @error('pattern')
@@ -274,7 +321,11 @@
                     <select name="fit" id="fit" class="form-control select2" style="width: 100%;">
                       <option value="">Select</option>
                       @foreach ($fitArray as $fit)
-                            <option value="{{ $fit }}">{{ $fit }}</option>
+                            <option value="{{ $fit }}"
+                            @if (isset($productdata['fit']) && $productdata['fit']== $fit)
+                            selected =""
+                            @endif
+                            >{{ $fit }}</option>
                       @endforeach
                     </select>
                     @error('fit')
@@ -286,7 +337,11 @@
                     <select name="occassion" id="occassion" class="form-control select2" style="width: 100%;">
                       <option value="">Select</option>
                       @foreach ($occassionArray as $occassion)
-                            <option value="{{ $occassion }}">{{ $occassion }}</option>
+                            <option value="{{ $occassion }}"
+                            @if (isset($productdata['occassion']) && $productdata['occassion']== $occassion)
+                            selected =""
+                            @endif
+                            >{{ $occassion }}</option>
                       @endforeach
                     </select>
                     @error('occassion')

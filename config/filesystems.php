@@ -66,6 +66,18 @@ return [
             'url' => env('APP_URL').'/public',
             'visibility' => 'public',
         ],
+        'products_images' => [
+            'driver' => 'local',
+            'root' => base_path(). 'public/images/products_images/',
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+        ],
+        'product_videos' => [
+            'driver' => 'local',
+            'root' => base_path(). 'public/videos/product_videos/', 
+            'url' => env('APP_URL').'/public',
+            'visibility' => 'public',
+        ],
 
         's3' => [
             'driver' => 's3',

@@ -41,10 +41,10 @@ class ProductController extends Controller
    }
 
    public function deleteProduct($id){
-        Product::where('id',$id)->delete();
-        $message = "Product has been deleted";
-        Session::flash('success_message',$message);
-        return redirect()->back();
+        // Product::where('id',$id)->delete();
+        // $message = "Product has been deleted";
+        // Session::flash('success_message',$message);
+        // return redirect()->back();
 
         try {
             $deleteProduct = Product::find($id);
@@ -67,10 +67,15 @@ class ProductController extends Controller
         if($id==""){
             $title = "Add product";
             $product = new Product;
+            $productdata = array();
             $message = "Product added Successfully";
 
         }else{
             $title = "Edit Product";
+            $productdata = Product::find($id);
+            $product = Product::find($id);
+            $message = "Product Edited Successfully";
+
         }
 
         try {
@@ -94,6 +99,33 @@ class ProductController extends Controller
 
                 $this->validate($request,$rules,$messages);
 
+                if($request->hasFile('main_image')){
+                    $fileExtension =$request -> main_image -> getClientOriginalExtension();
+                    $fileName = time().'.'.$fileExtension;
+                    $path = 'images/products_images';
+                    $request -> main_image ->move($path,$fileName);
+                   $product->main_image = $fileName;
+                }
+
+                if($request->hasFile('product_video')){
+                    $fileExtension =$request ->product_video -> getClientOriginalExtension();
+                    $fileName = time().'.'.$fileExtension;
+                    $path = 'videos/product_videos';
+                    $request -> product_video ->move($path,$fileName);
+                   $product->product_video = $fileName;
+                }
+
+                // if ($request ->hasFile('product_video')) {
+                //     $video_tmp = $request->file('product_video');
+                //     if($video_tmp->isVAlid()){
+                //         $video_name = $video_tmp -> getClientOriginalName();
+                //         $extension = $video_tmp -> getClientOriginalExtension();
+                //         $videoName = $video_name.'-'.rand().'.'.$extension;
+                //         $video_path = 'videos/product_videos';
+                //         $video_tmp ->move($video_path,$videoName);
+                //         $product->product_video = $videoName;
+                //     }
+                // }
 
 
 
@@ -144,7 +176,7 @@ class ProductController extends Controller
 
 
 
-                return $categoryDetails = Category::find($data['category_id']); //الكاتيجورى اي دي اللي جاي من الفورم
+                $categoryDetails = Category::find($data['category_id']); //الكاتيجورى اي دي اللي جاي من الفورم
                 $product->section_id = $categoryDetails['section_id'];
                 $product->category_id = $data['category_id'];
                 $product->product_name = $data['product_name'];
@@ -190,6 +222,66 @@ class ProductController extends Controller
         $categories = Section::with('categories')->get();
 
         return view('admin.products.add_edit_product',compact('title','fabricArray','sleeveArray','patternArray',
-        'fitArray','occassionArray','categories'));
+        'fitArray','occassionArray','categories','productdata'));
    }
+
+   public function deleteProductIamge($id){
+        try {
+            //get product image
+            $productImage = Product::select('main_image')->find($id);
+            //get product path
+            $image_path = 'images/products_images/';
+
+            //delete product image from product images foldder if exists
+
+            if(file_exists($image_path.$productImage->main_image)){
+            unlink($image_path.$productImage->main_image);
+            }
+
+            //delete product image from categories table
+            Product::where('id',$id)->update(['main_image'=>'']);
+
+            $message = "Product Image has been deleted";
+            Session::flash('success_message',$message);
+            return redirect()->back();
+
+
+            } catch (\Throwable $th) {
+            //return $th;
+            Session::flash('error_message',"Product Image hasn't been deleted");
+            return redirect()->back();
+            }
+   }
+
+   public function deleteProductVideo($id){
+    try {
+        //get product image
+        $productvideo = Product::select('product_video')->find($id);
+        //get product path
+        $video_path = 'videos/product_videos/';
+
+        //delete product video from product videos foldder if exists
+
+        if(file_exists($video_path.$productvideo->product_video)){
+        unlink($video_path.$productvideo->product_video);
+        }
+
+        //delete product video from categories table
+        Product::where('id',$id)->update(['product_video'=>'']);
+
+        $message = "Product video has been deleted";
+        Session::flash('success_message',$message);
+        return redirect()->back();
+
+
+        } catch (\Throwable $th) {
+        //return $th;
+        Session::flash('error_message',"Product video hasn't been deleted");
+        return redirect()->back();
+        }
+}
+
+
+
+
 }

@@ -48,7 +48,7 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
         Route::get('sections','SectionController@sections')->name('admin.sections');
         Route::post('update-section-status','SectionController@updateSectionStatus')->name('admin.update-section');
 
-        
+
 
 ########################## End Sections Routes #########################################################################
 
@@ -70,6 +70,11 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
         Route::post('update-product-status','ProductController@updateProductStatus')->name('admin.update-category');
         Route::get('delete-product/{id}','ProductController@deleteProduct');
         Route::match(['get','post'],'add-edit-product/{id?}','ProductController@addEditProduct');
+        Route::get('delete-product-image/{id}','ProductController@deleteProductIamge');
+        Route::get('delete-product/{id}','ProductController@deleteproduct');
+        Route::get('delete-product-video/{id}','ProductController@deleteProductVideo');
+
+
 
 
 

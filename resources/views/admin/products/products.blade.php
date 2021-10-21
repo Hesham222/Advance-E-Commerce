@@ -54,6 +54,7 @@
                   <th>Product Name </th>
                   <th>Product code </th>
                   <th>Product color</th>
+                  <th>Product Image</th>
                   <th>Category</th>
                   <th>Section</th>
                   <th>Status</th>
@@ -67,7 +68,12 @@
                         <td>{{ $product ->product_name }} </td>
                         <td>{{ $product ->product_code }} </td>
                         <td>{{ $product ->product_color }}</td>
-                        <td>{{ $product ->category->category_name }}</td>
+                        <td>
+                            @if (!empty($product->main_image))
+                            <img width="100px" height="100px" src="{{ asset('images/products_images/'.$product->main_image) }}" alt="">
+                            @endif
+                        </td>
+                        <td> {{ $product ->category->category_name }}</td>
                         <td>{{ $product ->section->name }}</td>
                         <td>
                             @if($product ->status ==1)
@@ -79,11 +85,17 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ url('admin/add-edit-product',$product ->id) }}">Edit</a>
+                            <a title="Add/Edit Attributes" href="{{ url('admin/add-attributes',$product ->id) }}">
+                                <i class="fas fa-plus"></i>
+                            </a>
                             &nbsp;&nbsp;
-                            <a href="javascript:void(0)"  class="confirmDelete" record="product" recordid="{{ $product ->id }}"
+                            <a title="Edit Product" href="{{ url('admin/add-edit-product',$product ->id) }}"><i class="fas fa-edit"></i>
+                            </a>
+                            &nbsp;&nbsp;
+                            <a title="Delete Product" href="javascript:void(0)"  class="confirmDelete" record="product" recordid="{{ $product ->id }}"
                                 {{-- href="{{ url('admin/delete-product',$product ->id) }}" --}}
-                                >Delete</a>
+                                ><i class="fas fa-trash"></i>
+                            </a>
 
                         </td>
                     </tr>
