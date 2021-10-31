@@ -7,15 +7,21 @@ use App\models\Product;
 use App\Models\Section;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\Products_Image;
+use App\Models\Products_Attribute;
 use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
    public function products(){
        Session::put('page','products');
+
         $products = Product::with(['category'=>function($query){
+
            $query->select('id','category_name');
+
         },'section'=>function($query){
+
         $query->select('id','name');}
         ])->get();
        return view('admin.products.products',compact('products'));
@@ -281,10 +287,130 @@ class ProductController extends Controller
         }
 }
 
-    public function addAttributes($id){
-        $productdata = Product::find($id);
-        $title = "Products Attributes";
-        return view('admin.products.add_attributes',compact('productdata','title'));
+    public function addAttributes(Request $request,$id){
+
+        try {
+            if($request->isMethod('post')){
+                $data = $request->all();
+                foreach ($data['sku'] as $key => $value) {
+                    if(!empty($value)){
+
+                        $attrCountSKU = Products_Attribute::where('sku',$value)->count();
+                        if ($attrCountSKU>0) {
+                            Session::flash('error_message','Sku is aready exist ');
+                            return redirect()->back();
+                        }
+                        //$id ده بتاع البروداكت
+                        $attrCountSize = Products_Attribute::where(['product_id'=>$id,'size'=>$data['size'][$key]])->count();
+                        if ($attrCountSize>0) {
+                            Session::flash('error_message','Size is aready exist ');
+                            return redirect()->back();
+                        }
+                        $attribute = new Products_Attribute;
+                        $attribute->product_id = $data['product_id'];
+                        $attribute->sku =$value;
+                        $attribute->size = $data['size'][$key];
+                        $attribute->stock = $data['stock'][$key];
+                        $attribute->price = $data['price'][$key];
+                        //status ببعتها ديفولت بواحد عشان كل مااعمل اترر جديده تتعمل اكتف لوحديها
+                        $attribute->status =1;
+                        $attribute->save();
+                    }
+
+                }
+
+                Session::flash('success_message','Product Attributes added Sucessfully');
+                return redirect()->back();
+            }
+            //اول حاجه وانا بضيف او اي حاجه بكتب الكود اللي هجيب بيه حاجه عايزها تظهر
+             $productdata = Product::with('attributes')->find($id);
+            $title = "Products Attributes";
+            return view('admin.products.add_attributes',compact('productdata','title'));
+
+        } catch (\Throwable $th) {
+           // throw $th;
+            //return $th;
+            Session::flash('error_message','Product Attributes Not added ');
+            return redirect()->back();
+        }
+
+    }
+
+    public function editAttributes(Request $request,$id){
+        try {
+
+            if($request->isMethod('post')){
+                 $data = $request->all();
+                 //بلف ع اي حاجه ف الارراي
+                 foreach ($data['price'] as $key => $attr) {
+                    if(!empty($attr)){
+                        Products_Attribute::where(['id'=>$data['attrId'][$key]])->update([
+                            'price' =>$data['price'][$key],
+                            'stock' =>$data['stock'][$key],
+                        ]);
+                    }
+                }
+                $message = "Product Attributes Edited";
+                Session::flash('success_message',$message);
+                return redirect()->back();
+            }
+
+
+        } catch (\Throwable $th) {
+            throw $th;
+            Session::flash('error_message',"Product Attributes Not Edited");
+            return redirect()->back();
+        }
+    }
+
+    public function updateAttributeStatus(Request $request){
+        try {
+            if($request->ajax()) {
+                $data = $request->all();
+                //echo "<pre>" ; print_r ($data) ; die;
+            // return $data;
+            if($data['status'] == "Active"){
+                $status = 0;
+            }else{
+                $status = 1;
+            }
+            Products_Attribute::where('id',$data['attribute_id'])->update(['status'=>$status]);
+            return response()->json(['status'=>$status,'attribute_id'=>$data['attribute_id']]);
+            }
+        } catch (\Throwable $th) {
+            return $th;
+        }
+
+    }
+    public function deleteAttribute($id){
+        try {
+            $attr = Products_Attribute::find($id);
+            $attr->delete();
+            $message = "Product Attribute has been deleted";
+
+            Session::flash('success_message',$message);
+            return redirect()->back();
+
+
+        } catch (\Throwable $th) {
+            return $th;
+            Session::flash('error_message',"Product Attribute hasn't been deleted");
+                 return redirect()->back();
+        }
+
+    }
+
+    public function addImages($id){
+        try {
+
+           $productdata = Product::select('id','product_name','product_color','product_code','main_image')->with('images')->find($id);
+           // echo "<pre>"; print_r( $productdata);
+           $title = "Products Images";
+           return view('admin.products.add_images',compact('productdata','title'));
+
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
 

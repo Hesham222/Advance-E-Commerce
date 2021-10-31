@@ -67,7 +67,7 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
 ########################## Begin Products Routes #########################################################################
 
         Route::get('products','ProductController@products')->name('products');
-        Route::post('update-product-status','ProductController@updateProductStatus')->name('admin.update-category');
+        Route::post('update-product-status','ProductController@updateProductStatus')->name('admin.update-product');
         Route::get('delete-product/{id}','ProductController@deleteProduct');
         Route::match(['get','post'],'add-edit-product/{id?}','ProductController@addEditProduct');
         Route::get('delete-product-image/{id}','ProductController@deleteProductIamge');
@@ -81,9 +81,15 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
 ########################## Begin Products Attributes #########################################################################
 
         Route::match(['get','post'],'add-attributes/{id}','ProductController@addAttributes');
+        Route::post('edit-attributes/{id}','ProductController@editAttributes');
+        Route::post('update-attribute-status','ProductController@updateAttributeStatus')->name('admin.update-attribute');
+        Route::get('delete-attribute/{id}','ProductController@deleteAttribute');
 
 
 ########################## End Products Attributesoutes #########################################################################
+//images
+        Route::match(['get','post'],'add-images/{id}','ProductController@addImages');
+
 
     });
 

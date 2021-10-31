@@ -71,7 +71,7 @@ class CategoryController extends Controller
             //Edit Category functionality
             $categorydata = Category::find($id);
             $getCategories = Category::with('subcategories')->where(['section_id'=>$categorydata['section_id'],'parent_id'=>0,'status'=>1])->get();
-            $message = " Category Updated Successfully";
+            $message = "Category Updated Successfully";
             $category = Category::find($id);
         }
         try {

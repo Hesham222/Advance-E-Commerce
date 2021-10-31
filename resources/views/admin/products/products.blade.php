@@ -89,8 +89,12 @@
                                 <i class="fas fa-plus"></i>
                             </a>
                             &nbsp;&nbsp;
+                            <a title="Add Images" href="{{ url('admin/add-images',$product ->id) }}"><i class="fas fa-image"></i>
+                            </a>
+                            &nbsp;&nbsp;
                             <a title="Edit Product" href="{{ url('admin/add-edit-product',$product ->id) }}"><i class="fas fa-edit"></i>
                             </a>
+
                             &nbsp;&nbsp;
                             <a title="Delete Product" href="javascript:void(0)"  class="confirmDelete" record="product" recordid="{{ $product ->id }}"
                                 {{-- href="{{ url('admin/delete-product',$product ->id) }}" --}}

@@ -368,7 +368,7 @@
                        {{$productdata['meta_description']}}
                         @else
                          {{old('meta_description')}}
-                      @endif
+                        @endif
                        </textarea>
                     </div>
                   <div class="form-group">
@@ -396,8 +396,11 @@
                     </div>
                     <div class="form-group">
                         <label for="meta_keywords">Is_featured</label>
-                        <input type="checkbox" name="is_featured" id="is_featured" value="yes">
-
+                        <input type="checkbox" name="is_featured" id="is_featured" value="yes"
+                        @if (!empty($productdata['is_featured']) && $productdata['is_featured'] == "Yes")
+                        checked =""
+                         @endif
+                         >
                     </div>
                 </div>
 
