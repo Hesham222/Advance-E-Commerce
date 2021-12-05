@@ -400,8 +400,35 @@ class ProductController extends Controller
 
     }
 
-    public function addImages($id){
+    public function addImages(Request $request,$id){
         try {
+            if($request->isMethod('post')){
+                 $data = $request->all();
+                //  echo "<pre>"; print_r($data);
+
+                if($request->hasFile('image')){
+                    //echo "test";die;
+                    $images = $request->file('image');
+                    foreach ($images as $key => $image) {
+                        $productImage = new Products_Image;
+                        $fileExtension =$image -> getClientOriginalExtension();
+                        $fileName = time().'.'.$fileExtension;
+                        $path = 'images/products_images';
+                        $image ->move($path,$fileName);
+                        $productImage->image = $fileName;
+                        $productImage->product_id = $id;
+                        $productImage->status = 1;
+                        $productImage -> save();
+
+                    }
+
+                    Session::flash('success_message','produc images has been added');
+                    return redirect()->back();
+
+                }
+
+            }
+
 
            $productdata = Product::select('id','product_name','product_color','product_code','main_image')->with('images')->find($id);
            // echo "<pre>"; print_r( $productdata);
@@ -409,9 +436,58 @@ class ProductController extends Controller
            return view('admin.products.add_images',compact('productdata','title'));
 
         } catch (\Throwable $th) {
-            //throw $th;
+           // throw $th;
+           Session::flash('error_message','produc images has not been added');
+           return redirect()->back();
         }
     }
+
+    public function updateImageStatus(Request $request){
+
+        try {
+            if($request->ajax()) {
+                 $data = $request->all();
+                //echo "<pre>" ; print_r ($data) ; die;
+            // return $data;
+            if($data['status'] == "Active"){
+                $status = 0;
+            }else{
+                $status = 1;
+            }
+            Products_Image::where('id',$data['image_id'])->update(['status'=>$status]);
+            return response()->json(['status'=>$status,'image_id'=>$data['image_id']]);
+            }
+        } catch (\Throwable $th) {
+            return $th;
+        }
+
+    }
+    public function deleteImage($id){
+        try{
+
+            //get product image
+            $productImage = Products_Image::select('image')->find($id);
+            //get product path
+            $image_path = 'images/products_images/';
+
+            //delete product image from product images foldder if exists
+
+            if(file_exists($image_path.$productImage->image)){
+            unlink($image_path.$productImage->image);
+            }
+
+            //delete product image from categories table
+            Products_Image::where('id',$id)->delete();
+
+            $message = "Product Image has been deleted";
+            Session::flash('success_message',$message);
+            return redirect()->back();
+
+        }catch(\Throwable $th) {
+            throw $th;
+        }
+    }
+
 
 
 }

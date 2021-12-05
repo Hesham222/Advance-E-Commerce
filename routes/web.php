@@ -89,6 +89,19 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
 ########################## End Products Attributesoutes #########################################################################
 //images
         Route::match(['get','post'],'add-images/{id}','ProductController@addImages');
+        Route::post('update-image-status','ProductController@updateImageStatus')->name('admin.update-image');
+        Route::get('delete-image/{id}','ProductController@deleteImage');
+
+########################## Begin Brands Routes #########################################################################
+
+Route::get('brands','BrandController@brands')->name('admin.brands');
+Route::post('update-brand-status','BrandController@updateBrandStatus')->name('admin.update-brand');
+Route::match(['get','post'],'add-edit-brand/{id?}','BrandController@addEditBrands');
+
+
+
+
+########################## End Sections Routes #########################################################################
 
 
     });

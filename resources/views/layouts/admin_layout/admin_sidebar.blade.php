@@ -105,6 +105,17 @@
                   <p>Sections </p>
                 </a>
               </li>
+              @if (Session::get('page')=="brands")
+              <?php $active = "active"; ?>
+              @else
+              <?php $active = ""; ?>
+              @endif
+              <li class="nav-item">
+                <a href="{{ route('admin.brands') }}" class="nav-link {{ $active }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Brands</p>
+                </a>
+              </li>
               @if (Session::get('page')=="categories")
               <?php $active = "active"; ?>
               @else
@@ -127,6 +138,7 @@
                   <p>Products</p>
                 </a>
               </li>
+
 
             </ul>
           </li>

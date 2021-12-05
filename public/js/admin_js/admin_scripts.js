@@ -117,6 +117,55 @@ $(document).ready(function(){
 
         });
 
+        //update Product Images status
+        $(".updateImagestatus").click(function(){
+            var status = $(this).text();
+            var image_id = $(this).attr("image_id");
+            // alert(status);
+            // alert(category_id);
+            $.ajax({
+                type: 'post',
+                url: '/admin/update-image-status',
+                data:{status:status,image_id:image_id},
+                success:function(resp){
+                    // alert(resp['status']);
+                    // alert(resp['category_id']);
+                    if(resp['status']==0){
+                        $("#image-"+image_id).html("<a class='updateImagestatus' href='javascript:void(0)'>Inactive</a>");
+                    }else if(resp['status']==1)
+                        $("#image-"+image_id).html("<a class='updateImagestatus' href='javascript:void(0)'>Active</a>");
+                },error:function(){
+                    alert("Error");
+                }
+            });
+
+        });
+
+        //update Brands status
+        $(".updateBrandStatus").click(function(){
+            var status = $(this).text();
+            var brand_id = $(this).attr("brand_id");
+            // alert(status);
+            // alert(category_id);
+            $.ajax({
+                type: 'post',
+                url: '/admin/update-brand-status',
+                data:{status:status,brand_id:brand_id},
+                success:function(resp){
+                    // alert(resp['status']);
+                    // alert(resp['category_id']);
+                    if(resp['status']==0){
+                        $("#brand-"+brand_id).html("<a class='updateBrandStatus' href='javascript:void(0)'>Inactive</a>");
+                    }else if(resp['status']==1)
+                        $("#brand-"+brand_id).html("<a class='updateBrandStatus' href='javascript:void(0)'>Active</a>");
+                },error:function(){
+                    alert("Error");
+                }
+            });
+
+        });
+
+
     //append Categories Level
     $('#section_id').change(function(){
         var section_id = $(this).val();
