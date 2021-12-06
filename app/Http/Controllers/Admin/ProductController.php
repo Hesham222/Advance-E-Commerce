@@ -291,7 +291,8 @@ class ProductController extends Controller
 
         try {
             if($request->isMethod('post')){
-                $data = $request->all();
+                 $data = $request->all();
+                 //print_r($data);die;
                 foreach ($data['sku'] as $key => $value) {
                     if(!empty($value)){
 

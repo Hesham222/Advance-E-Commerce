@@ -147,7 +147,8 @@
                                         <a title="Delete attribute" href="javascript:void(0)"  class="confirmDelete" record="attribute" recordid="{{ $attribute ->id }}"
                                             {{-- href="{{ url('admin/delete-attribute',$attribute ->id) }}" --}}
                                             ><i class="fas fa-trash"></i>
-                                        </a> 
+                                        </a>
+                                        
                                     </div>
 
                                 </div>

@@ -75,10 +75,10 @@
                         <td>
                             @if($category ->status ==1)
                                <a class="updateCategoryStatus" id="category-{{ $category ->id }}" category_id="{{ $category ->id }}"
-                                href="javascript:void(0)">Active</a>
+                                href="javascript:void(0)"><i class="fas fa-toggle-on" aria-hidden="true" status = "Active"></i></a>
                             @else
                                 <a class="updateCategoryStatus" id="category-{{ $category ->id }}" category_id="{{ $category ->id }}"
-                                href="javascript:void(0)">Inactive</a>
+                                href="javascript:void(0)"><i class="fas fa-toggle-off" aria-hidden="true" status = "Inactive"></i></a>
                             @endif
                         </td>
                         <td>

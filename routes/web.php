@@ -86,7 +86,7 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
         Route::get('delete-attribute/{id}','ProductController@deleteAttribute');
 
 
-########################## End Products Attributesoutes #########################################################################
+########################## End Products Attributes #########################################################################
 //images
         Route::match(['get','post'],'add-images/{id}','ProductController@addImages');
         Route::post('update-image-status','ProductController@updateImageStatus')->name('admin.update-image');
@@ -97,6 +97,7 @@ Route::prefix('/admin')->namespace('Admin')->group(function(){
 Route::get('brands','BrandController@brands')->name('admin.brands');
 Route::post('update-brand-status','BrandController@updateBrandStatus')->name('admin.update-brand');
 Route::match(['get','post'],'add-edit-brand/{id?}','BrandController@addEditBrands');
+Route::get('delete-brand/{id}','BrandController@deletBrand');
 
 
 
