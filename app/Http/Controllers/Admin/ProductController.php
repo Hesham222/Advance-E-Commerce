@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Session;
+use App\Models\Brand;
 use App\models\Product;
 use App\Models\Section;
 use App\Models\Category;
@@ -22,7 +23,9 @@ class ProductController extends Controller
 
         },'section'=>function($query){
 
-        $query->select('id','name');}
+        $query->select('id','name');},'brand'=>function($query){
+            $query->select('id','name');
+        }
         ])->get();
        return view('admin.products.products',compact('products'));
    }
@@ -178,6 +181,9 @@ class ProductController extends Controller
                 if(empty($data['product_discount'])){
                     $data['product_discount'] =0;
                 }
+                if(empty($data['product_weight'])){
+                    $data['product_weight'] =0;
+                }
 
 
 
@@ -204,6 +210,7 @@ class ProductController extends Controller
                 $product->meta_description = $data['meta_description'];
                 $product->meta_keywords = $data['meta_keywords'];
                 $product->is_featured = $data['is_featured'];
+                $product->brand_id = $data['brand_id'];
                 $product->status = 1;
                 $product ->save();
 
@@ -225,10 +232,11 @@ class ProductController extends Controller
         $fitArray = array('Regular','Slim');
         $occassionArray = array('Casual','Formal');
 
-        $categories = Section::with('categories')->get();
+        $categories = Section::where('status',1)->with('categories')->get();
+        $brands = Brand::where('status',1)->get();
 
         return view('admin.products.add_edit_product',compact('title','fabricArray','sleeveArray','patternArray',
-        'fitArray','occassionArray','categories','productdata'));
+        'fitArray','occassionArray','categories','productdata','brands'));
    }
 
    public function deleteProductIamge($id){

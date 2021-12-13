@@ -82,11 +82,11 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ url('admin/add-edit-category',$category ->id) }}">Edit</a>
+                            <a href="{{ url('admin/add-edit-category',$category ->id) }}"><i class="fas fa-edit"></i></a>
                             &nbsp;&nbsp;
                             <a href="javascript:void(0)"  class="confirmDelete" record="category" recordid="{{ $category ->id }}"
                                 {{-- href="{{ url('admin/delete-category',$category ->id) }}" --}}
-                                >Delete</a>
+                                ><i class="fas fa-trash"></i></a>
 
                         </td>
                     </tr>

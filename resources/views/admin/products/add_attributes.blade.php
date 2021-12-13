@@ -101,7 +101,7 @@
             @csrf
             <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Addedd Product Attributes</h3>
+                  <h3 class="card-title">Added Product Attributes</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -119,7 +119,8 @@
                     </thead>
                     <tbody>
                     @foreach ($productdata->attributes as $attribute)
-                        <input type="hidden" name="attrId[]" value="{{ $attribute->id }}">
+
+                    <input hidden name="attrId[]" value="{{ $attribute ->id }}">
                         <tr>
                             <td>{{ $attribute->id }}</td>
                             <td>{{ $attribute->size}} </td>
@@ -136,10 +137,10 @@
                                     <div>
                                         @if($attribute ->status ==1)
                                         <a class="updateAttributeStatus" id="attribute-{{ $attribute ->id }}" attribute_id="{{ $attribute ->id }}"
-                                         href="javascript:void(0)">Active</a>
+                                         href="javascript:void(0)"><i class="fas fa-toggle-on" aria-hidden="true" status = "Active"></i></a>
                                         @else
                                          <a class="updateAttributeStatus" id="attribute-{{ $attribute ->id }}" attribute_id="{{ $attribute ->id }}"
-                                         href="javascript:void(0)">Inactive</a>
+                                         href="javascript:void(0)"><i class="fas fa-toggle-off" aria-hidden="true" status = "Inactive"></i></a>
                                         @endif
                                     </div>
                                     <div>
@@ -148,7 +149,7 @@
                                             {{-- href="{{ url('admin/delete-attribute',$attribute ->id) }}" --}}
                                             ><i class="fas fa-trash"></i>
                                         </a>
-                                        
+
                                     </div>
 
                                 </div>

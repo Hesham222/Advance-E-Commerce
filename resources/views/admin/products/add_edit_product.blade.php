@@ -105,6 +105,22 @@
                         <span class="text-danger"> {{$message}}</span>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label>Select Brand</label>
+                        <select name="brand_id" id="brand_id" class="form-control select2" style="width: 100%;">
+                          <option value="">Select</option>
+                          @foreach ($brands as $brand)
+                                <option value="{{ $brand->id }}"
+                                @if (isset($productdata['brand_id']) && $productdata['brand_id']== $brand->id)
+                                selected =""
+                                @endif
+                                >{{ $brand->name }}</option>
+                          @endforeach
+                        </select>
+                        @error('brand')
+                        <span class="text-danger"> {{$message}}</span>
+                        @enderror
+                    </div>
                   <div class="form-group">
                       <label>Product Name </label>
                       <input class="form-control" id="product_name" name="product_name" type="text" placeholder="Enter product Name "
@@ -119,6 +135,7 @@
                       @enderror
                   </div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Product Code </label>
@@ -146,8 +163,6 @@
                         <span class="text-danger"> {{$message}}</span>
                         @enderror
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="form-group">
                         <label>Product Price </label>
                         <input class="form-control" id="product_price" name="product_price" type="text" placeholder="Enter product Price "
@@ -161,6 +176,9 @@
                         <span class="text-danger"> {{$message}}</span>
                         @enderror
                     </div>
+                </div>
+                <div class="col-md-6">
+
                     <div class="form-group">
                         <label>Product Discount (%) </label>
                         <input class="form-control" id="product_discount" name="product_discount" type="text" placeholder="Enter product Discount "
@@ -174,21 +192,22 @@
                         <span class="text-danger"> {{$message}}</span>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label>Product Weight </label>
+                        <input class="form-control" id="product_weight" name="product_weight" type="text" placeholder="Enter product Weight "
+                        @if (!empty($productdata['product_weight']))
+                          value="{{ $productdata['product_weight'] }}"
+                          @else
+                          value="{{ old('product_weight') }}"
+                        @endif
+                        >
+                        @error('product_weight')
+                        <span class="text-danger"> {{$message}}</span>
+                        @enderror
+                    </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Product Weight </label>
-                    <input class="form-control" id="product_weight" name="product_weight" type="text" placeholder="Enter product Weight "
-                    @if (!empty($productdata['product_weight']))
-                      value="{{ $productdata['product_weight'] }}"
-                      @else
-                      value="{{ old('product_weight') }}"
-                    @endif
-                    >
-                    @error('product_weight')
-                    <span class="text-danger"> {{$message}}</span>
-                    @enderror
-                </div>
+
 
                   <div class="form-group">
                       <label for="main_image">Product Main Image</label>
@@ -213,32 +232,33 @@
                       </div>
                   @endif
                     </div>
+                    <div class="form-group">
+                        <label for="product_video">Product Video</label>
+                        <div class="input-group">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-label" name="product_video" id="product_video">
+                            <label class="custom-file-label" for="product_video">Choose file</label>
+                          </div>
+                          <div class="input-group-append">
+                            <span class="input-group-text" id="">Upload</span>
+                          </div>
+                        </div>
+                        @if (!empty($productdata['product_video']))
+                        <div>
+                            <a href="{{ url('videos/product_videos/'.$productdata['product_video']) }}" download>Download</a>
+                            &nbsp;|&nbsp;
+                            <a record="product-video" recordid="{{ $productdata['id']}}"  href="javascript:void(0)"  class="confirmDelete"
+                            {{-- href="{{ url('admin/delete-category-image',$categorydata['id']) }}" --}}
+
+                            > Delete Video</a>
+                        </div>
+                        @endif
+                      </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12 col-sm-6">
-                  <div class="form-group">
-                    <label for="product_video">Product Video</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-label" name="product_video" id="product_video">
-                        <label class="custom-file-label" for="product_video">Choose file</label>
-                      </div>
-                      <div class="input-group-append">
-                        <span class="input-group-text" id="">Upload</span>
-                      </div>
-                    </div>
-                    @if (!empty($productdata['product_video']))
-                    <div>
-                        <a href="{{ url('videos/product_videos/'.$productdata['product_video']) }}" download>Download</a>
-                        &nbsp;|&nbsp;
-                        <a record="product-video" recordid="{{ $productdata['id']}}"  href="javascript:void(0)"  class="confirmDelete"
-                        {{-- href="{{ url('admin/delete-category-image',$categorydata['id']) }}" --}}
 
-                        > Delete Video</a>
-                    </div>
-                    @endif
-                  </div>
                   <div class="form-group">
                     <label>product Description </label>
                     <textarea class="form-control" name="description" id="description" rows="3" placeholder="Enter ...">
@@ -250,6 +270,16 @@
                     </textarea>
 
                   </div>
+                  <div class="form-group">
+                    <label>Meta Title </label>
+                    <textarea class="form-control" name="meta_title" id="meta_title" rows="3" placeholder="Enter ...">
+                    @if (!empty($productdata['meta_title']))
+                    {{$productdata['meta_title']}}
+                    @else
+                        {{old('meta_title')}}
+                    @endif
+                </textarea>
+                </div>
               </div>
               <div class="col-12 col-sm-6">
                 <div class="form-group">
@@ -371,16 +401,7 @@
                         @endif
                        </textarea>
                     </div>
-                  <div class="form-group">
-                    <label>Meta Title </label>
-                    <textarea class="form-control" name="meta_title" id="meta_title" rows="3" placeholder="Enter ...">
-                    @if (!empty($productdata['meta_title']))
-                    {{$productdata['meta_title']}}
-                    @else
-                        {{old('meta_title')}}
-                    @endif
-                </textarea>
-                </div>
+
                 </div>
 
                 <div class="col-12 col-sm-6">

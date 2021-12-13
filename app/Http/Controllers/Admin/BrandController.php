@@ -68,7 +68,7 @@ class BrandController extends Controller
                  $brand->status = 1;
                  $brand->save();
 
-                 Session::flash('success_message','Brand added Sucessfully');
+                 Session::flash('success_message',$message);
                  return redirect('admin/brands');
             }
         } catch (\Throwable $th) {

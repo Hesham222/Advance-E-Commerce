@@ -29,9 +29,9 @@ class AdminController extends Controller
             'password' => 'required',
            ];
            $messages =[
-            'email.required' => 'البريد الإلكتروني مطلوب.',
-            'email.email' => 'ادخل عنوان بريد إلكتروني صالح.',
-            'password.required' => 'كلمة المرور مطلوبة.'
+            'email.required' => 'Email is Required',
+            'email.email' => 'Valid Email',
+            'password.required' => 'Password is Required'
            ];
            $this->validate($request,$rules,$messages);
 
@@ -72,6 +72,23 @@ class AdminController extends Controller
 
     public function updateCuurentPassword(Request $request){
         if($request ->isMethod('post')){
+
+
+            $rules =[
+                'current_password' => 'required',
+                'new_password' => 'required',
+                'confirm_password' => 'required',
+               ];
+
+               $messages =[
+                'current_password.required' => ' Current Password is Required',
+                'new_password.required' => 'Current Password is Required',
+                'confirm_password.required' => 'Confirm Password is Required',
+               ];
+
+              $this->validate($request,$rules,$messages);
+
+
             $data = $request -> all();
             if(Hash::check($data['current_password'],Auth::guard('admin')->user()->password)){
                 if($data['new_password'] == $data['confirm_password']){
@@ -143,7 +160,7 @@ class AdminController extends Controller
                    return redirect()->back();
             }
         } catch (\Throwable $th) {
-            return $th;
+            throw $th;
            // DB::rollback();
 
         }
